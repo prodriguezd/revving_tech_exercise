@@ -73,17 +73,16 @@ class CustomerTotalTests(TestCase):
         Customer.objects.create(name="Customer No Invoices")
         response = get_customer_totals("Customer No Invoices")
         self.assertEqual(response['status'], 'ok')
-        self.assertEqual(len(response['message']), 0)  # Expect empty data list
+        self.assertEqual(len(response['message']), 0)
 
     def test_customer_exists_with_invoices(self):
         response = get_customer_totals(self.customer_name)
         self.assertEqual(response['status'], 'ok')
-        self.assertEqual(len(response['message']), 2)  # Two revenue sources
+        self.assertEqual(len(response['message']), 2)
 
-        # Check for correct calculation of total advances
-        # Assuming advance_amount calculation logic is correct and setup data is unchanged
+
         for item in response['message']:
             if item['revenue_source'] == self.revenue_source1.name:
-                self.assertEqual(item['total_advance'], Decimal("90.00"))  # Example based on your advance_amount logic
+                self.assertEqual(item['total_advance'], Decimal("90.00"))
             elif item['revenue_source'] == self.revenue_source2.name:
-                self.assertEqual(item['total_advance'], Decimal("190.00"))  # Example based on your advance_amount logic
+                self.assertEqual(item['total_advance'], Decimal("190.00"))
